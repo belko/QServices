@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ASDataContext.GetServiceCompaniesResult>
+
+@{
+    ASDataContext.Service currentService = ViewBag.Service;
+    ViewBag.Title = currentService.title;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="description">
+    @Html.Raw(currentService.description)
+</div>
+
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.distance)
+        </th>
+
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.distance)
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,69 @@
+﻿@model IEnumerable<ASDataContext.GrabedCompany>
+
+@{
+    ViewBag.Title = "Всі компанії";
+    int TotalPages = ViewBag.TotalPages;
+    int CurrentPage = ViewBag.CurrentPage;
+}
+
+<h2>@ViewBag.Title</h2>
+<div class="actions">
+@if (User.IsInRole(ASWeb.Extension.Permitions.RoleNameAdmins))
+{
+    <span class="float-left">
+        @Html.ActionLink("Створити", "CompanyCreate")
+    </span>
+    
+    <form class="float-right">
+        <input type="text" name="filter" placeholder="Фільтр" value="@ViewBag.Filter"/>
+        <input type="submit" value="Фільтр" />
+    </form>
+}
+</div>
+<table style="width:100%">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.phoness)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+             @Html.ActionLink(item.title!=null?item.title:"Без назви", "Company", "My", new { id = item.id },null)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.phoness)
+        </td>
+        <td>
+            @Html.ActionLink("Редагувати", "CompanyEdit", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>
+@if(TotalPages>1){
+    <table style="margin-left: auto;margin-right: auto;">
+        <tr>
+            @for(int i=1;i<=TotalPages;i++){
+                <td style="padding:0"> @if(i!=CurrentPage){
+                         <span>@Html.ActionLink(i.ToString(), "Companies", new { page=i, filter=ViewBag.Filter})</span> 
+                     }else
+                     {
+                         <span>@i</span>
+                     }
+                </td>
+            }
+        </tr>
+    </table>
+}

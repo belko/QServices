@@ -1,0 +1,81 @@
+﻿@model IEnumerable<ASWeb.Models.ServiceModel>
+
+@{
+    ViewBag.Title = "Всі Сервіси";
+    int TotalPages = ViewBag.TotalPages;
+    int CurrentPage = ViewBag.CurrentPage;
+    string Sorting = ViewBag.Sorting;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="actions">
+@if (User.IsInRole(ASWeb.Extension.Permitions.RoleNameAdmins))
+{
+    <span class="float-left">
+        @Html.ActionLink("Створити", "ServiceEdit",new { returnUrl = Request.Url.PathAndQuery })
+    </span>
+    
+    <form class="float-right">
+        <input type="text" name="filter" placeholder="Фільтр" value="@ViewBag.Filter"/>
+        <input type="submit" value="Фільтр" />
+    </form>
+}
+</div>
+
+<table style="width:100%">
+    <tr>
+        <th>
+            @Html.ActionLink("Назва", "Services", new { filter = ViewBag.filter, sort = "title" })
+        </th>
+        <th>
+            @Html.ActionLink("Батьківський", "Services", new { filter = ViewBag.filter, sort = "parent" })
+        </th>
+        <th>
+            Опис
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.parent)
+        </td>
+        <td>
+            @if (item.description != null && item.description.Length > 100) 
+            {
+                <span>@item.description.Substring(0,100)</span>
+            }else
+            {
+                <span>@item.description</span>
+            }
+            
+        </td>
+        <td>
+            @Html.ActionLink("Редагувати", "ServiceEdit", new { id=item.id,returnUrl = Request.Url.PathAndQuery }) 
+        </td>
+    </tr>
+}
+
+</table>
+@if(TotalPages>1){
+    <div style="text-align:center;">
+    <table style="margin-left: auto;margin-right: auto;">
+        <tr>
+            @for(int i=1;i<=TotalPages;i++){
+                <td style="padding:0"> @if(i!=CurrentPage){
+                         <span>@Html.ActionLink(i.ToString(), "Services", new { page=i, filter=ViewBag.Filter,sort=ViewBag.Sorting})</span> 
+                     }else
+                     {
+                         <span>@i</span>
+                     }
+                </td>
+            }
+        </tr>
+    </table>
+    </div>
+}

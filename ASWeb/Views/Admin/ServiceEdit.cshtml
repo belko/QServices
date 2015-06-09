@@ -1,0 +1,59 @@
+﻿@model ASDataContext.Service
+
+@{
+    if(Model.id==0){
+        ViewBag.Title = "Створення сервісу";
+    }else{
+        ViewBag.Title = "Редагування сурвісу";
+    }
+    
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Service</legend>
+
+        @Html.HiddenFor(model => model.id)
+
+        <div class="editor-label">
+            Заголовок
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.title)
+            @Html.ValidationMessageFor(model => model.title)
+        </div>
+
+        <div class="editor-label">
+            Опис
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.description)
+            @Html.ValidationMessageFor(model => model.description)
+        </div>
+
+        <div class="editor-label">
+            Батьківський
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("parent",new SelectList(ViewBag.Parents,"id","title",Model.parent),"")
+            @Html.ValidationMessageFor(model => model.parent)
+        </div>
+
+        <p>
+            <input type="submit" value="Зберегти" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Повернутись", "Services", new { returnUrl = ViewBag.ReturnUrl })
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
